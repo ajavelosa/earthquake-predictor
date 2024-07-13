@@ -22,7 +22,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock /app/
 
 # install Python dependencies from the pyproject.toml file
-RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+RUN poetry install
 
 # Create runtime image
 FROM python:3.10.3-slim-buster
