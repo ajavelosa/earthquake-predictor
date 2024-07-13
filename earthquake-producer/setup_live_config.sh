@@ -1,0 +1,2 @@
+export KAFKA_TOPIC=earthquake
+export LIVE_OR_HISTORICAL=live
