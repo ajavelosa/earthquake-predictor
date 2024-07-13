@@ -1,23 +1,41 @@
-FROM python:3.11.1-slim-buster
+# Two step Docker build:
+# 1. Build virtual env
+# 2. Create the runtime image, used to just run the code provided its virtual environment
 
-# Set environment variables to non-interactive and unbuffered output
-ENV DEBIAN_FRONTEND=noninteractive \
-    PYTHONUNBUFFERED=1 \
-    PYTHONIOENCODING=UTF-8
+# Build virtual env
+FROM python:3.10-buster AS builder
 
-# Set the working directory inside the container
+# stream output to console
+ENV PYTHONUNBUFFERED=1
+
+# install poetry inside the container
+RUN pip install poetry==1.8.2
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
 WORKDIR /app
 
-# Copy only the requirements file(s) to leverage Docker cache
-# Assuming all requirements files are in the root or subdirectories
-COPY ./requirements.txt ./
+# copy the pyproject.toml and poetry.lock files into the container
+COPY pyproject.toml poetry.lock /app/
 
-# Install dependencies
-# Adding `--no-cache-dir` to avoid storing unnecessary files and potentially reduce image size
-RUN pip install --no-cache-dir -r requirements.txt
+# install Python dependencies from the pyproject.toml file
+RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
 
-# Copy the rest of the application
-COPY . .
+# Create runtime image
+FROM python:3.10.3-slim-buster
 
-# Set the command to run your application
-ENTRYPOINT ["python3", "main.py"]
+ENV VIRTUAL_ENV=/app/.venv \
+    PATH="/app/.venv/bin:$PATH"
+
+COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+
+# add /app/src to PYTHONPATH
+ENV PYTHONPATH "${PYTHONPATH}:/app/src"
+
+# copy all the source code into the container
+COPY src ./src
+
+CMD ["python", "src/main.py"]
