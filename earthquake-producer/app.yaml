@@ -6,6 +6,11 @@ variables:
     description: Topic where we save the processed earthquake data
     defaultValue: earthquake
     required: true
+  - name: LIVE_OR_HISTORICAL
+    inputType: FreeText
+    description: Whether we choose live or historical data
+    defaultValue: live
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
