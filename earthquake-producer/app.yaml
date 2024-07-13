@@ -11,6 +11,6 @@ variables:
     description: Name of the output topic to write to.
     defaultValue: transform
     required: false
-dockerfile: dockerfile
+dockerfile: Dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
