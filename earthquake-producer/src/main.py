@@ -33,6 +33,8 @@ def produce_earthquakes(
             # Get the earthquakes from the Kraken API
             earthquake: Earthquake = seismic_portal_api.get_earthquakes()
             # Serialize an event using the defined Topic
+
+            breakpoint()
             message = topic.serialize(
                 key=earthquake.region,
                 value=earthquake.model_dump()
