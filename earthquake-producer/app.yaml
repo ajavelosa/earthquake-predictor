@@ -12,5 +12,5 @@ variables:
     defaultValue: live
     required: true
 dockerfile: Dockerfile
-runEntryPoint: main.py
-defaultFile: main.py
+runEntryPoint: src/main.py
+defaultFile: src/main.py
