@@ -26,6 +26,7 @@ def produce_earthquakes(
     #     raise NotImplementedError('Historical data is not implemented yet.')
 
     logger.info('Creating the kafka producer.')
+    logger.debug(topic.name)
 
     with app.get_producer() as producer:
         while True:
@@ -33,6 +34,7 @@ def produce_earthquakes(
             # Get the earthquakes from the Kraken API
             earthquake: Earthquake = seismic_portal_api.get_earthquakes()
             # Serialize an event using the defined Topic
+
             message = topic.serialize(
                 key=earthquake.region,
                 value=earthquake.model_dump()
