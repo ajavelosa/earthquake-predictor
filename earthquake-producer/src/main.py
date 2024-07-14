@@ -46,6 +46,8 @@ def produce_earthquakes(
                 key=message.key,
             )
 
+            logger.debug(earthquake.model_dump())
+
             logger.info(earthquake)
 
 if __name__ == '__main__':
