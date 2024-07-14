@@ -44,6 +44,7 @@ def produce_earthquakes(
                 topic=topic.name,
                 value=message.value,
                 key=message.key,
+                poll_timeout=600
             )
 
             logger.info(earthquake)
