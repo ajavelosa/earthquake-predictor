@@ -34,7 +34,7 @@ def produce_earthquakes(
             earthquake: Earthquake = seismic_portal_api.get_earthquakes()
             # Serialize an event using the defined Topic
 
-            breakpoint()
+            logger.debug(topic.name)
             message = topic.serialize(
                 key=earthquake.region,
                 value=earthquake.model_dump()
