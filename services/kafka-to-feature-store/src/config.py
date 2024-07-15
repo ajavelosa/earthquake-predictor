@@ -4,7 +4,7 @@ from typing import Optional
 
 
 class Config(BaseSettings):
-    kafka_broker_address: Optional[str]
+    kafka_broker_address: Optional[str] = None
     kafka_topic: str
     kafka_consumer_group: str
     feature_group_name: str
