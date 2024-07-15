@@ -16,6 +16,11 @@ variables:
     description: Name of the Hopsworks feature group to write data to
     defaultValue: earthquakes
     required: true
+  - name: FEATURE_GROUP_VERSION
+    inputType: FreeText
+    description: Version of the Hopsworks feature group to write data to
+    defaultValue: 1
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/main.py
 defaultFile: src/main.py
