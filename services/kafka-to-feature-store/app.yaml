@@ -31,6 +31,11 @@ variables:
     description: Live if we run using realtime data, historical otherwise
     defaultValue: live
     required: true
+  - name: HOPSWORKS_API_KEY
+    inputType: Secret
+    description: API key to connect to Hopsworks
+    defaultValue: HOPSWORKS_API_KEY
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/main.py
 defaultFile: src/main.py
