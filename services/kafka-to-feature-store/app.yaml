@@ -21,6 +21,11 @@ variables:
     description: Version of the Hopsworks feature group to write data to
     defaultValue: 1
     required: true
+  - name: BUFFER_SIZE
+    inputType: FreeText
+    description: Size of the buffer to push to the feature store
+    defaultValue: 1
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/main.py
 defaultFile: src/main.py
