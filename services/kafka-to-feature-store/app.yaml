@@ -11,6 +11,11 @@ variables:
     description: Consumer that reads data from the KAFKA_TOPIC
     defaultValue: earthquake_consumer_group
     required: true
+  - name: FEATURE_GROUP_NAME
+    inputType: FreeText
+    description: Name of the Hopsworks feature group to write data to
+    defaultValue: earthquakes
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/main.py
 defaultFile: src/main.py
