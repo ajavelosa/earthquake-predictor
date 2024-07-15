@@ -2,7 +2,7 @@
 The earthquake predictor is an application that pulls real-time earthquake data from [seismicportal.eu](https://www.seismicportal.eu/) and predicts the next earthquake. The data and predictions can be accessed through [this dashboard](tbd).
 
 ## Table of contents
-- [Installation](#installation)
+- [Getting started](#getting-started)
 - [Usage](#usage)
 - [Structure](#structure)
 
@@ -12,9 +12,7 @@ The earthquake predictor is an application that pulls real-time earthquake data 
 git clone https://github.com/ajavelosa/earthquake-predictor.git
 ```
 ### Install the application
-```
-make install
-```
+*Work in progress*
 ### Requirements
 Python 3.10+, Apache Kafka 0.10+
 
