@@ -6,6 +6,11 @@ variables:
     description: Topic containing earthquake data
     defaultValue: earthquake
     required: true
+  - name: KAFKA_CONSUMER_GROUP
+    inputType: FreeText
+    description: Consumer that reads data from the KAFKA_TOPIC
+    defaultValue: earthquake_consumer_group
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/main.py
 defaultFile: src/main.py
