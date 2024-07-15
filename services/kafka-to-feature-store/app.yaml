@@ -41,6 +41,11 @@ variables:
     description: Hopsworks Project where our feature store is
     defaultValue: HOPSWORKS_PROJECT_NAME
     required: true
+  - name: SAVE_EVERY_N_SEC
+    inputType: FreeText
+    description: Time before buffer is pushed to feature store
+    defaultValue: 600
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/main.py
 defaultFile: src/main.py
