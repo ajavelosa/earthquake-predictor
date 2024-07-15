@@ -25,6 +25,55 @@ deployments:
         description: Whether we choose live or historical data
         required: true
         value: live
+  - name: kafka-to-feature-store
+    application: services/kafka-to-feature-store
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    variables:
+      - name: KAFKA_TOPIC
+        inputType: InputTopic
+        description: Topic containing earthquake data
+        required: true
+        value: earthquake
+      - name: KAFKA_CONSUMER_GROUP
+        inputType: FreeText
+        description: Consumer that reads data from the KAFKA_TOPIC
+        required: true
+        value: earthquake_consumer_group
+      - name: FEATURE_GROUP_NAME
+        inputType: FreeText
+        description: Name of the Hopsworks feature group to write data to
+        required: true
+        value: earthquakes
+      - name: FEATURE_GROUP_VERSION
+        inputType: FreeText
+        description: Version of the Hopsworks feature group to write data to
+        required: true
+        value: 1
+      - name: BUFFER_SIZE
+        inputType: FreeText
+        description: Size of the buffer to push to the feature store
+        required: true
+        value: 1
+      - name: LIVE_OR_HISTORICAL
+        inputType: FreeText
+        description: Live if we run using realtime data, historical otherwise
+        required: true
+        value: live
+      - name: HOPSWORKS_API_KEY
+        inputType: Secret
+        description: API key to connect to Hopsworks
+        required: true
+        secretKey: HOPSWORKS_API_KEY
+      - name: HOPSWORKS_PROJECT_NAME
+        inputType: Secret
+        description: Hopsworks Project where our feature store is
+        required: true
+        secretKey: HOPSWORKS_PROJECT_NAME
 
 # This section describes the Topics of the data pipeline
 topics:
