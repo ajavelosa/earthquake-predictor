@@ -5,26 +5,7 @@ metadata:
   version: 1.0
 
 # This section describes the Deployments of the data pipeline
-deployments:
-  - name: earthquake-producer
-    application: earthquake-producer
-    version: latest
-    deploymentType: Service
-    resources:
-      cpu: 200
-      memory: 500
-      replicas: 1
-    variables:
-      - name: KAFKA_TOPIC
-        inputType: OutputTopic
-        description: Topic where we save the processed earthquake data
-        required: true
-        value: earthquake
-      - name: LIVE_OR_HISTORICAL
-        inputType: FreeText
-        description: Whether we choose live or historical data
-        required: true
-        value: live
+deployments: []
 
 # This section describes the Topics of the data pipeline
 topics:
