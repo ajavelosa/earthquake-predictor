@@ -17,7 +17,7 @@ class SeismicPortalAPI:
         self._ws = create_connection(self.URL)
         logger.info('Successfully connected to websocket.')
 
-    def get_earthquakes(self) -> List[dict]:
+    def get_earthquakes(self) -> Earthquake:
         """
         Fetches the earthquake data from the Seismic Portal Websocket API.
 
@@ -25,14 +25,14 @@ class SeismicPortalAPI:
             None
 
         Returns:
-            List[dict]: A list of dictionaries with the earthquake data with the format:
+            Earthquake: An earthquake class with the format:
                 {
-                    "timestamp_ms": "2021-06-01T00:00:00.000Z",
-                    "lat": 34.6820,
-                    "lon": 23.8458,
-                    "depth": 10.3,
-                    "mag": 3.0,
-                    "region": "CRETE, GREECE"
+                    "timestamp_ms": 1721081730640,
+                    "region": "SOUTHERN CALIFORNIA",
+                    "magnitude": 2.3,
+                    "depth": 7.9,
+                    "latitude": 32.8632,
+                    "longitude": -116.1513
                 }
         """
         msg = self._ws.recv()
@@ -44,14 +44,6 @@ class SeismicPortalAPI:
 
         timestamp_ms = self.to_ms(msg_contents['time'])
 
-        # earthquake = {
-        #     'timestamp_ms': timestamp_ms,
-        #     'lat': msg_contents['lat'],
-        #     'lon': msg_contents['lon'],
-        #     'depth': msg_contents['depth'],
-        #     'mag': msg_contents['mag'],
-        #     'region': msg_contents['flynn_region']
-        # }
         earthquake = Earthquake(
             timestamp_ms=timestamp_ms,
             latitude=msg_contents['lat'],
@@ -66,9 +58,10 @@ class SeismicPortalAPI:
     @staticmethod
     def to_ms(timestamp: str) -> int:
         """
-        A function that transforms a timestamps expressed
+        A function that transforms a UTC timestamp expressed
         as a string like this '2024-06-17T09:36:39.467866Z'
-        into a timestamp expressed in milliseconds.
+        into a timestamp expressed in milliseconds such as
+        1718616999000.
 
         Args:
             timestamp (str): A timestamp expressed as a string.
@@ -76,10 +69,6 @@ class SeismicPortalAPI:
         Returns:
             int: A timestamp expressed in milliseconds.
         """
-        # parse a string like this '2024-06-17T09:36:39.467866Z'
-        # into a datetime object assuming UTC timezone
-        # and then transform this datetime object into Unix timestamp
-        # expressed in milliseconds
         from dateutil import parser
         from datetime import timezone
 
