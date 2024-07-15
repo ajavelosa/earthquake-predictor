@@ -1,0 +1,35 @@
+# write a docker compose with 3 services
+# - services/trade_producer.py
+# - services/trade_to_ohlc.py
+# - services/kafka_to_feature_store.py
+# make sure that I can connect to the redpanda_broker
+version: "3.7"
+name: feature_pipeline
+networks:
+  redpanda_network:
+    name: redpanda_network
+    driver: bridge
+services:
+
+  earthquake-producer:
+    build:
+      context: ../services/earthquake-producer
+    networks:
+      - redpanda_network
+    environment:
+      KAFKA_BROKER_ADDRESS: redpanda-0:9092
+    env_file:
+      - ../services/earthquake-producer/setup_live_config.sh
+    restart: always
+
+  kafka-to-feature-store:
+    build:
+      context: ../services/kafka-to-feature-store
+    networks:
+      - redpanda_network
+    environment:
+      KAFKA_BROKER_ADDRESS: redpanda-0:9092
+    env_file:
+      - ../setup_credentials.sh
+      - ../services/kafka-to-feature-store/setup_live_config.sh
+    restart: always
