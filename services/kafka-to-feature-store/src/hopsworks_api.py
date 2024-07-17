@@ -9,6 +9,7 @@ def push_data_to_feature_store(
     feature_group_name: str,
     feature_group_version: int,
     data: List[dict],
+    online_or_offline: str,
 ) -> None:
     """
     Pushes the given `data` to the feature store, writing it to the feature group
@@ -51,5 +52,9 @@ def push_data_to_feature_store(
 
     feature_group.insert(
         data,
-        write_options={"start_offline_materialization": True},
+        write_options={
+            "start_offline_materialization": True
+            # if online_or_offline == "offline"
+            # else False
+        },
     )
