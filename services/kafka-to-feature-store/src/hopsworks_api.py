@@ -9,7 +9,6 @@ def push_data_to_feature_store(
     feature_group_name: str,
     feature_group_version: int,
     data: List[dict],
-    online_or_offline: str,
 ) -> None:
     """
     Pushes the given `data` to the feature store, writing it to the feature group
@@ -40,8 +39,8 @@ def push_data_to_feature_store(
         name=feature_group_name,
         version=feature_group_version,
         description="Earthquake data from Seismic Portal",
-        primary_key=["region", "timestamp_ms"],
-        event_time="timestamp_ms",
+        primary_key=["region", "timestamp_hr"],
+        event_time="timestamp_sec",
         online_enabled=True,
     )
 
@@ -52,9 +51,5 @@ def push_data_to_feature_store(
 
     feature_group.insert(
         data,
-        write_options={
-            "start_offline_materialization": True
-            if online_or_offline == "offline"
-            else False
-        },
+        write_options={"start_offline_materialization": True},
     )
