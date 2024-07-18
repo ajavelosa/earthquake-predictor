@@ -6,8 +6,8 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: earthquake-producer
-    application: services/earthquake-producer
+  - name: Earthquake producer
+    application: services/earthquake_producer
     version: latest
     deploymentType: Service
     resources:
@@ -25,8 +25,8 @@ deployments:
         description: Whether we choose live or historical data
         required: true
         value: live
-  - name: kafka-to-feature-store
-    application: services/kafka-to-feature-store
+  - name: Seismic data sink
+    application: services/seismic_data_sink
     version: latest
     deploymentType: Service
     resources:
