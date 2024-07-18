@@ -22,7 +22,7 @@ class Config(BaseSettings):
     buffer_size: int
 
     # force save to feature store every n seconds
-    save_every_n_sec: int = 600
+    save_every_n_sec: int = 1
 
     @field_validator("live_or_historical")
     @classmethod

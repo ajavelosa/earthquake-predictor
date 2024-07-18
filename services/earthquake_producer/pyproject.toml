@@ -13,7 +13,13 @@ tornado = "^6.4.1"
 quixstreams = "^2.7.0"
 python-dateutil = "^2.9.0.post0"
 pydantic-settings = "^2.3.4"
+xmltodict = "^0.13.0"
+pandas = "^2.2.2"
 
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
+ruff = "^0.5.2"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,4 +1,4 @@
-name: earthquake-producer
+name: Earthquake producer
 language: python
 variables:
   - name: KAFKA_TOPIC
