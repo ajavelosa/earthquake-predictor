@@ -1,4 +1,4 @@
-name: kafka-to-feature-store
+name: Seismic data sink
 language: python
 variables:
   - name: KAFKA_TOPIC

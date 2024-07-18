@@ -11,25 +11,25 @@ networks:
     driver: bridge
 services:
 
-  earthquake-producer:
+  earthquake_producer:
     build:
-      context: ../services/earthquake-producer
+      context: ../services/earthquake_producer
     networks:
       - redpanda_network
     environment:
       KAFKA_BROKER_ADDRESS: redpanda-0:9092
     env_file:
-      - ../services/earthquake-producer/setup_live_config.sh
+      - ../services/earthquake_producer/setup_live_config.sh
     restart: always
 
-  kafka-to-feature-store:
+  seismic_data_sink:
     build:
-      context: ../services/kafka-to-feature-store
+      context: ../services/seismic_data_sink
     networks:
       - redpanda_network
     environment:
       KAFKA_BROKER_ADDRESS: redpanda-0:9092
     env_file:
       - ../setup_credentials.sh
-      - ../services/kafka-to-feature-store/setup_live_config.sh
+      - ../services/seismic_data_sink/setup_live_config.sh
     restart: always
