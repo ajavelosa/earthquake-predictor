@@ -1,7 +1,7 @@
 import json
 
 from quixstreams import Application
-from typing import Optional
+from typing import Optional, List, Tuple, Any
 
 from loguru import logger
 from src.hopsworks_api import push_data_to_feature_store
@@ -17,6 +17,24 @@ def get_current_utc_sec() -> int:
     from datetime import datetime, timezone
 
     return int(datetime.now(timezone.utc).timestamp())
+
+def custom_ts_extractor(
+    value: Any,
+    headers: Optional[List[Tuple[str, bytes]]],
+    timestamp: float,
+    timestamp_type,  #: TimestampType,
+) -> int:
+    """
+    Specifying a custom timestamp extractor to use the timestamp from the message payload
+    instead of Kafka timestamp.
+
+    We want to use the `timestamp_sec` field from the message value, and not the timestamp
+    of the message that Kafka generates when the message is saved into the Kafka topic.
+
+    See the Quix Streams documentation here
+    https://quix.io/docs/quix-streams/windowing.html#extracting-timestamps-from-messages
+    """
+    return value["timestamp_sec"]
 
 
 def kafka_to_feature_store(
@@ -64,7 +82,7 @@ def kafka_to_feature_store(
         else "latest",
     )
 
-    topic = app.topic(kafka_topic, value_serializer="json")
+    topic = app.topic(kafka_topic, value_serializer="json", timestamp_extractor=custom_ts_extractor)
 
     last_saved_to_feature_store_ts = get_current_utc_sec()
 
