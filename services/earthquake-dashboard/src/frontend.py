@@ -18,4 +18,6 @@ hopsworks_api = HopsworksApi(
 
 data = hopsworks_api.extract_online_features_from_feature_view(last_n_days=7)
 
-st.table(data)
+st.map(data, latitude="latitude", longitude="longitude", size="magnitude", zoom=1)
+
+st.table(data.sort_values("timestamp_sec", ascending=False).head(20))

@@ -71,13 +71,13 @@ class HopsworksApi:
         logger.info(f"Extracting offline features from feature view: {self.feature_view_name}")
 
         try:
-            features: pd.DataFrame = feature_view.get_batch_data()
-
-        except FeatureStoreException:
-            # retry the call with the use_hive option. This is what Hopsworks recommends
             features: pd.DataFrame = feature_view.get_batch_data(
                 read_options={"use_hive": True}
             )
+
+        except FeatureStoreException:
+            # retry the call with the use_hive option. This is what Hopsworks recommends
+            logger.info("Data not available.")
 
         return features
 
@@ -100,8 +100,8 @@ class HopsworksApi:
 
         primary_keys = [
             {
-                "region": "WESTERN TURKEY",
                 "timestamp_hr": timestamp_hr,
+                "region": "NEAR COAST OF NICARAGUA",
             }
             for timestamp_hr in hrs
         ]
