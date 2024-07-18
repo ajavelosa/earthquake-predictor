@@ -2,6 +2,10 @@ run-dev:
 	KAFKA_BROKER_ADDRESS='localhost:19092' \
 	source ../../setup_credentials.sh && source setup_live_config.sh && poetry run python src/main.py
 
+run-dev-historical:
+	KAFKA_BROKER_ADDRESS='localhost:19092' \
+	source ../../setup_credentials.sh && source setup_historical_config.sh && poetry run python src/main.py
+
 build:
 	@echo "Building the docker image for the kafka-to-feature-store microservice..."
 	docker build -t kafka-to-feature-store .

@@ -2,6 +2,10 @@ run-dev:
 	KAFKA_BROKER_ADDRESS='localhost:19092' \
 	source setup_live_config.sh && poetry run python src/main.py
 
+run-dev-historical:
+	KAFKA_BROKER_ADDRESS='localhost:19092' \
+	source setup_historical_config.sh && poetry run python src/main.py
+
 build:
 	@echo "Building the docker image for the earthquake-producer microservice..."
 	docker build -t earthquake-producer .
@@ -14,3 +18,13 @@ run: build
 		-e KAFKA_TOPIC=earthquake \
 		-e LIVE_OR_HISTORICAL=live \
 		earthquake-producer
+
+lint:
+	@echo "Linting code..."
+	poetry run ruff check --fix
+
+format:
+	@echo "Formatting code..."
+	poetry run ruff format .
+
+lint-and-format: lint format
