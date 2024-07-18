@@ -38,27 +38,14 @@ def produce_earthquakes(
             # Get earthquakes from the seismic portal API
             earthquakes: List[Earthquake] = seismic_portal_api.get_earthquakes()
 
-            # Need to figure out why single-element lists get stuck in the producer.
-            # Standard looping appears not to work. I will implement this solution
-            # for now with the intention to revisit later as it's extremely crude.
-            if len(earthquakes) == 1:
+            for earthquake in earthquakes:
                 message = topic.serialize(
-                    key=earthquakes[0].region, value=earthquakes[0].model_dump()
+                    key=earthquake.region, value=earthquake.model_dump()
                 )
                 producer.produce(
                     topic=topic.name, value=message.value, key=message.key, poll_timeout=600
                 )
-                logger.info(earthquakes[0])
-
-            else:
-                for earthquake in earthquakes:
-                    message = topic.serialize(
-                        key=earthquake.region, value=earthquake.model_dump()
-                    )
-                    producer.produce(
-                        topic=topic.name, value=message.value, key=message.key, poll_timeout=600
-                    )
-                    logger.info(earthquake)
+                logger.info(earthquake)
 
 
 if __name__ == "__main__":
