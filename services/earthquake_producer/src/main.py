@@ -20,7 +20,10 @@ def produce_earthquakes(
     """
 
     app = Application(broker_address=kafka_broker_address)
-    topic = app.topic(name=kafka_topic, value_serializer="json")
+    topic = app.topic(
+        name=kafka_topic,
+        value_serializer="json",
+    )
 
     logger.info(f"Creating a service to fetch {live_or_historical} earthquake data.")
 
@@ -43,7 +46,11 @@ def produce_earthquakes(
                     key=earthquake.region, value=earthquake.model_dump()
                 )
                 producer.produce(
-                    topic=topic.name, value=message.value, key=message.key, poll_timeout=600
+                    topic=topic.name,
+                    value=message.value,
+                    key=message.key,
+                    timestamp=earthquake.timestamp_sec * 1000,
+                    poll_timeout=600,
                 )
                 logger.info(earthquake)
 
