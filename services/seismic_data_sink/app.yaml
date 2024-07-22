@@ -19,7 +19,7 @@ variables:
   - name: FEATURE_GROUP_VERSION
     inputType: FreeText
     description: Version of the Hopsworks feature group to write data to
-    defaultValue: 1
+    defaultValue: 2
     required: true
   - name: BUFFER_SIZE
     inputType: FreeText
