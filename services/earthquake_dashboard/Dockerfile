@@ -40,4 +40,4 @@ EXPOSE 8501
 # copy all the source code into the container
 COPY src ./src
 
-CMD ["streamlit", "run", "src/frontend.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "src/frontend.py", "--server.port=80", "--server.address=0.0.0.0"]
