@@ -1,6 +1,11 @@
 name: Earthquake dashboard
 language: python
-variables: []
+variables:
+  - name: HOPSWORKS_API_KEY
+    inputType: Secret
+    description: API key to connect to Hopsworks
+    defaultValue: HOPSWORKS_API_KEY
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/frontend.py
 defaultFile: src/frontend.py
