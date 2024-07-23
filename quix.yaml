@@ -79,6 +79,48 @@ deployments:
         description: Time before buffer is pushed to feature store
         required: true
         value: 600
+  - name: Earthquake dashboard
+    application: services/earthquake_dashboard
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: earthquake-dash
+    variables:
+      - name: HOPSWORKS_API_KEY
+        inputType: Secret
+        description: API key to connect to Hopsworks
+        required: true
+        secretKey: HOPSWORKS_API_KEY
+      - name: HOPSWORKS_PROJECT_NAME
+        inputType: Secret
+        description: Hopsworks project that stores the data
+        required: true
+        secretKey: HOPSWORKS_PROJECT_NAME
+      - name: FEATURE_GROUP_NAME
+        inputType: FreeText
+        description: Feature group containing the data
+        required: true
+        value: earthquakes
+      - name: FEATURE_GROUP_VERSION
+        inputType: FreeText
+        description: Version of the feature group containing the data
+        required: true
+        value: 3
+      - name: FEATURE_VIEW_NAME
+        inputType: FreeText
+        description: Feature view that reads the data
+        required: true
+        value: earthquakes
+      - name: FEATURE_VIEW_VERSION
+        inputType: FreeText
+        description: Version of the feature view that reads the data
+        required: true
+        value: 3
 
 # This section describes the Topics of the data pipeline
 topics:
