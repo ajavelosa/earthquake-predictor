@@ -5,3 +5,5 @@
 **.env
 certificates/
 notebooks/
+.env
+.venv/

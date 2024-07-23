@@ -1,0 +1,6 @@
+name: earthquake_dashboard
+language: python
+variables: []
+dockerfile: Dockerfile
+runEntryPoint: src/frontend.py
+defaultFile: src/frontend.py
