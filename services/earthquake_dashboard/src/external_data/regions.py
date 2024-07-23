@@ -1,7 +1,7 @@
 import requests
 import xmltodict
 from datetime import datetime, timedelta, timezone
-from src.config import config
+
 
 def get_regions(last_n_days):
     """
@@ -11,10 +11,11 @@ def get_regions(last_n_days):
     start_datetime = end_datetime - timedelta(days=last_n_days)
 
     URL = "https://www.seismicportal.eu/fdsnws/event/1/query?limit={limit}&start={start_datetime}&end={end_datetime}"
-    response = requests.get(URL.format(
-        limit=20000,
-        start_datetime=start_datetime,
-        end_datetime=end_datetime,
+    response = requests.get(
+        URL.format(
+            limit=20000,
+            start_datetime=start_datetime,
+            end_datetime=end_datetime,
         )
     )
 
@@ -22,7 +23,7 @@ def get_regions(last_n_days):
 
     earthquake_regions = []
 
-    for event in response_dict['q:quakeml']['eventParameters']['event']:
-        earthquake_regions.append(event['description']['text'])
+    for event in response_dict["q:quakeml"]["eventParameters"]["event"]:
+        earthquake_regions.append(event["description"]["text"])
 
-    return earthquake_regions
+    return set(earthquake_regions)

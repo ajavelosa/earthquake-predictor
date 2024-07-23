@@ -1,6 +1,4 @@
 from pydantic_settings import BaseSettings
-from pydantic import field_validator
-from typing import Optional
 
 
 class Config(BaseSettings):
@@ -14,7 +12,7 @@ class Config(BaseSettings):
     hopsworks_project_name: str
     hopsworks_api_key: str
 
-    # live_or_historical: Optional[str] = "live"
+    # live_or_historical: Optional[str] = "historical"
 
     # @field_validator("live_or_historical")
     # @classmethod
@@ -24,5 +22,6 @@ class Config(BaseSettings):
     #         "historical",
     #     }, f"Invalid value for live_or_historical: {value}"
     #     return value
+
 
 config = Config()

@@ -7,6 +7,7 @@ from loguru import logger
 
 from src.external_data.regions import get_regions
 
+
 class HopsworksApi:
     def __init__(
         self,
@@ -54,22 +55,12 @@ class HopsworksApi:
 
         return feature_view
 
-    def extract_online_features_from_feature_view(self, last_n_days) -> pd.DataFrame:
-
-        feature_view = self.get_feature_view()
-
-        features = feature_view.get_feature_vectors(
-            entry=self.get_primary_keys(last_n_days),
-            return_type="pandas",
-        )
-
-        return features
-
     def extract_offline_features_from_feature_view(self) -> pd.DataFrame:
-
         feature_view = self.get_feature_view()
 
-        logger.info(f"Extracting offline features from feature view: {self.feature_view_name}")
+        logger.info(
+            f"Extracting offline features from feature view: {self.feature_view_name}"
+        )
 
         try:
             features: pd.DataFrame = feature_view.get_batch_data(
@@ -79,6 +70,16 @@ class HopsworksApi:
         except FeatureStoreException:
             # retry the call with the use_hive option. This is what Hopsworks recommends
             logger.info("Data not available.")
+
+        return features
+
+    def extract_online_features_from_feature_view(self, last_n_days) -> pd.DataFrame:
+        feature_view = self.get_feature_view()
+
+        features = feature_view.get_feature_vectors(
+            entry=self.get_primary_keys(last_n_days),
+            return_type="pandas",
+        )
 
         return features
 
