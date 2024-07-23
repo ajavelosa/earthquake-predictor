@@ -6,6 +6,11 @@ variables:
     description: API key to connect to Hopsworks
     defaultValue: HOPSWORKS_API_KEY
     required: true
+  - name: HOPSWORKS_PROJECT_NAME
+    inputType: Secret
+    description: Hopsworks project that stores the data
+    defaultValue: HOPSWORKS_PROJECT_NAME
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/frontend.py
 defaultFile: src/frontend.py
