@@ -1,4 +1,4 @@
-name: Earthquake Dashboard
+name: Earthquake dashboard
 language: python
 variables: []
 dockerfile: Dockerfile
