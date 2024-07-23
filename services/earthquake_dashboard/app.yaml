@@ -16,6 +16,11 @@ variables:
     description: Feature group containing the data
     defaultValue: earthquakes
     required: true
+  - name: FEATURE_GROUP_VERSION
+    inputType: FreeText
+    description: Version of the feature group containing the data
+    defaultValue: 3
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/frontend.py
 defaultFile: src/frontend.py
