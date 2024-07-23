@@ -23,7 +23,7 @@ variables:
     required: true
   - name: FEATURE_VIEW_NAME
     inputType: FreeText
-    description: Name of the feature view containing the data
+    description: Feature view containing the data
     defaultValue: earthquakes
     required: true
 dockerfile: Dockerfile
