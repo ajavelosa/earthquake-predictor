@@ -23,7 +23,7 @@ variables:
     required: true
   - name: FEATURE_VIEW_NAME
     inputType: FreeText
-    description: Feature view containing the data
+    description: Feature view that reads the data
     defaultValue: earthquakes
     required: true
   - name: FEATURE_VIEW_VERSION
