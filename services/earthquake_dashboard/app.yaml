@@ -26,6 +26,11 @@ variables:
     description: Feature view containing the data
     defaultValue: earthquakes
     required: true
+  - name: FEATURE_VIEW_VERSION
+    inputType: FreeText
+    description: Version of the feature view containing the data
+    defaultValue: 3
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/frontend.py
 defaultFile: src/frontend.py
