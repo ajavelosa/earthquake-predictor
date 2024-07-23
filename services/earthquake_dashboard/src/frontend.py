@@ -4,8 +4,10 @@ from src.config import config
 from src.hopsworks_api import HopsworksApi
 from datetime import datetime, timezone
 
-st.set_page_config(layout="wide")
-
+st.set_page_config(
+    layout="wide",
+    page_title="Earthquake Dashboard",
+)
 st.title("Earthquake Dashboard")
 
 live_or_historical = st.radio("Live or Historical Data", ["Live", "Historical"])
