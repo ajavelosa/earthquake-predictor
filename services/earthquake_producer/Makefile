@@ -15,7 +15,7 @@ run: build
 	docker run \
 		--network=redpanda_network \
 		-e KAFKA_BROKER_ADDRESS=redpanda-0:9092 \
-		-e KAFKA_TOPIC=earthquake \
+		-e KAFKA_TOPIC=earthquakes \
 		-e LIVE_OR_HISTORICAL=live \
 		earthquake_producer
 

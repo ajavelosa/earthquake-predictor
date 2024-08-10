@@ -1,2 +1,2 @@
-export KAFKA_TOPIC=earthquake
+export KAFKA_TOPIC=earthquakes
 export LIVE_OR_HISTORICAL=live

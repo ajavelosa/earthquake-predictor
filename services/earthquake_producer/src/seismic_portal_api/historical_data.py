@@ -38,6 +38,7 @@ class HistoricalEarthquakes:
             List[Earthquake]: A list of Earthquake models, each with the format:
                 {
                     "timestamp_ms": 1721081730640,
+                    "datestr": 2024-07-16
                     "region": "SOUTHERN CALIFORNIA",
                     "magnitude": 2.3,
                     "depth": 7.9,
@@ -86,7 +87,7 @@ class HistoricalEarthquakes:
                     earthquakes.append(
                         Earthquake(
                             timestamp_sec=self.to_sec(time_str),
-                            timestamp_hr=self.to_sec(time_str) // (60 * 60),
+                            datestr=time_str[:10],
                             latitude=earthquake["origin"]["latitude"]["value"],
                             longitude=earthquake["origin"]["longitude"]["value"],
                             depth=float(earthquake["origin"]["depth"]["value"]) / 1000,
