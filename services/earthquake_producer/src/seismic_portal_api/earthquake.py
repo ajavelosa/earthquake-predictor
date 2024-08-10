@@ -7,7 +7,7 @@ class Earthquake(BaseModel):
     """
 
     timestamp_sec: int
-    timestamp_hr: int
+    datestr: str
     region: str
     magnitude: float
     depth: float

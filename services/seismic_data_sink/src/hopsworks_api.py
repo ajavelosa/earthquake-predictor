@@ -40,7 +40,8 @@ def push_data_to_feature_store(
         name=feature_group_name,
         version=feature_group_version,
         description="Earthquake data from Seismic Portal",
-        primary_key=["region", "timestamp_hr"],
+        primary_key=["region"],
+        partition_key=["datestr"],
         event_time="timestamp_sec",
         online_enabled=True,
     )

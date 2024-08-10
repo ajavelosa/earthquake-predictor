@@ -88,11 +88,6 @@ def kafka_to_feature_store(
 
     buffer = []
 
-    # TODO: Implement the logic to write historical data to the feature store.
-    # We will need to push a larger buffer size. For live, we push each message
-    # immediately to the feature store since we only expect 1 message every few
-    # minutes.
-
     with app.get_consumer() as consumer:
         consumer.subscribe(topics=[topic.name])
 

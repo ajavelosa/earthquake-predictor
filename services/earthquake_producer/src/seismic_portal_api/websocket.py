@@ -28,7 +28,7 @@ class SeismicPortalAPI:
             Earthquake: An Earthquake model with the format:
                 {
                     "timestamp_sec": 1721270674,
-                    "timestamp_hr": 478130,
+                    "datestr": 2024-07-18,
                     "region": "NEAR THE COAST OF WESTERN TURKEY",
                     "magnitude": 2.4,
                     "depth": 10,
@@ -45,15 +45,10 @@ class SeismicPortalAPI:
         msg_contents = msg["data"]["properties"]
 
         timestamp_sec = self.to_sec(msg_contents["time"])
-        # We add the hour in minutes to the earthquake object to use
-        # as the primary key in the feature store. We don't need
-        # millisecond level granularity for training the model but
-        # we need it to store it to display it on the dashboard.
-        timestamp_hr = timestamp_sec // (60 * 60)
 
         earthquake = Earthquake(
             timestamp_sec=timestamp_sec,
-            timestamp_hr=timestamp_hr,
+            datestr=msg_contents["time"][:10],
             latitude=msg_contents["lat"],
             longitude=msg_contents["lon"],
             depth=msg_contents["depth"],

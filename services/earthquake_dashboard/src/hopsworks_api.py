@@ -102,12 +102,7 @@ class HopsworksApi:
         regions = get_regions(last_n_days)
 
         primary_keys = [
-            {
-                "timestamp_hr": timestamp_hr,
-                "region": region,
-            }
-            for region in regions
-            for timestamp_hr in hrs
+            {"region": region} for region in regions
         ]
 
         return primary_keys
