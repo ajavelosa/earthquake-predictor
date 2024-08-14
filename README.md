@@ -1,5 +1,5 @@
 # Earthquake Predictor
-The earthquake predictor is an application that pulls real-time earthquake data from [seismicportal.eu](https://www.seismicportal.eu/) and predicts the next earthquake. The data and predictions can be accessed through [this dashboard](tbd).
+The earthquake predictor is an application that pulls real-time earthquake data from [seismicportal.eu](https://www.seismicportal.eu/) and predicts the next earthquake. The data and predictions can be accessed through [this dashboard](https://earthquake-dash-antonjavelosa-earthquakepredictor-production.deployments.quix.io/).
 
 ## Table of contents
 - [Getting started](#getting-started)
