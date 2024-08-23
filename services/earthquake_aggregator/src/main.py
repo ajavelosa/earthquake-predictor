@@ -1,5 +1,6 @@
 from quixstreams import Application
 from typing import Any, List, Optional, Tuple
+from datetime import timedelta
 
 from loguru import logger
 from src.config import config
@@ -9,7 +10,7 @@ def main(
     kafka_consumer_group: str,
     kafka_input_topic: str,
     kafka_output_topic: str,
-    window_duration_ms: int,
+    window_duration_seconds: int,
     auto_offset_reset: str = "earliest",
 ):
     app = Application(
@@ -32,27 +33,30 @@ def main(
     # and use earthquakes with lesser magnitudes as supporting
     # features to be used by our machine learning model.
 
-    sdf = sdf.tumbling_window(
-        duration_ms=window_duration_ms,
-        grace_ms=5000,
-    )
+    sdf = sdf.tumbling_window(duration_ms=timedelta(seconds=window_duration_seconds), grace_ms=5000)
 
-    sdf = sdf.reduce(
-        initializer=init_earthquakes,
-        reducer=reduce_earthquakes,
-    ).final()
+    sdf = sdf.reduce(initializer=init_earthquakes, reducer=reduce_earthquakes).final()
 
     """
-    Now has the following schema:
+    We need to transform the current schema from this:
     {
-        "start":
-        "end":
+        "start": 1724281200000
+        "end": 1724284800000
         "value": {
-            "region":
-            "magnitude":
-            "depth":
-            "total_earthquakes":
+            "region": "EASTERN TURKEY"
+            "magnitude": 2.3
+            "depth": 6.9
+            "total_earthquakes": 2
         }
+    }
+
+    to this:
+    {
+        "region": "EASTERN TURKEY"
+        "magnitude": 2.3
+        "depth": 6.9
+        "total_earthquakes": 2
+        "timestamp": 1724284800000
     }
     """
 
@@ -60,9 +64,9 @@ def main(
     sdf["magnitude"] = sdf["value"]["magnitude"]
     sdf["depth"] = sdf["value"]["depth"]
     sdf["total_earthquakes"] = sdf["value"]["total_earthquakes"]
-    sdf["timestamp_ms"] = sdf["end"]
+    sdf["timestamp"] = sdf["end"]
 
-    sdf = sdf[["region", "magnitude", "depth", "total_earthquakes", "timestamp_ms",]]
+    sdf = sdf[["region", "magnitude", "depth", "total_earthquakes", "timestamp"]]
 
     sdf = sdf.update(logger.info)
 
@@ -103,11 +107,12 @@ def init_earthquakes(value: dict) -> dict:
     }
 
 def reduce_earthquakes(agg: dict, new: dict) -> dict:
+    total_earthquakes = agg["total_earthquakes"] + 1
     return {
         "region": agg["region"],
         "magnitude": max(agg["magnitude"], new["magnitude"]),
         "depth": max(agg["depth"], new["depth"]),
-        "total_earthquakes": agg["total_earthquakes"] + 1,
+        "total_earthquakes": total_earthquakes,
     }
 
 if __name__ == "__main__":
@@ -116,5 +121,5 @@ if __name__ == "__main__":
         kafka_consumer_group=config.kafka_consumer_group,
         kafka_input_topic=config.input_topic,
         kafka_output_topic=config.output_topic,
-        window_duration_ms=config.window_duration_ms,
+        window_duration_seconds=config.window_duration_seconds,
     )

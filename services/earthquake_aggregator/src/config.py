@@ -8,6 +8,6 @@ class Config(BaseSettings):
     input_topic: str = "earthquakes_historical"
     output_topic: str = "earthquakes_aggregated"
 
-    window_duration_ms: int = 60 * 60 * 1000 # 1 hour
+    window_duration_seconds: int = 60 * 60 # 1 hour
 
 config = Config()
