@@ -1,11 +1,13 @@
 import requests
 import xmltodict
+import time
 
 from loguru import logger
 
 from typing import List, Tuple
 from datetime import datetime, timedelta, timezone
 from dateutil import parser
+from xml.parsers.expat import ExpatError
 from src.seismic_portal_api.earthquake import Earthquake
 
 
@@ -14,7 +16,7 @@ class HistoricalEarthquakes:
     A class to query the Seismic Portal API for historical earthquakes.
     """
 
-    URL = "https://www.seismicportal.eu/fdsnws/event/1/query?limit={limit}&start={start_timestamp}&&end={end_timestamp}"
+    URL = "https://www.seismicportal.eu/fdsnws/event/1/query?limit={limit}&start={start_timestamp}&end={end_timestamp}"
 
     def __init__(
         self,
@@ -23,9 +25,7 @@ class HistoricalEarthquakes:
     ):
         self.last_n_days = last_n_days
         self.limit = limit
-        self.start_timestamp, self.end_timestamp = self._init_from_to_timestamps(
-            self.last_n_days
-        )
+        self.start_timestamp, self.end_timestamp = self._init_from_to_timestamps(self.last_n_days)
 
     def get_earthquakes(self) -> List[Earthquake]:
         """
@@ -46,26 +46,28 @@ class HistoricalEarthquakes:
                     "longitude": -116.1513
                 }
         """
-        # The query always pulls the latest data first. As we
-        # loop, we will replace the end_timestamp with the
-        # timestamp of the last earthquake we fetched.
-        logger.info(
-            f"Querying historical earthquakes from {self.start_timestamp} to {self.end_timestamp}."
-        )
+        # The query always pulls the latest data first. We need to query from the start so that
+        # we can get the oldest data first and process the data via Quixstreams. To do this, we
+        # need to query the data in chunks of 120 days. That will provide a safe buffer to ensure
+        # that we don't miss any data given the batch limit of 20,000.
+        logger.info(f"Querying historical earthquakes from {self.start_timestamp} to {self.end_timestamp}.")
 
         try:
             response = requests.get(
                 self.URL.format(
                     limit=self.limit,
                     start_timestamp=self.start_timestamp,
-                    end_timestamp=self.end_timestamp,
+                    end_timestamp=self.start_timestamp + timedelta(days=120),
                 )
             )
             response.raise_for_status()
+
         except Exception as e:
             logger.info(f"Failed to query Seismic Portal API. Status code: {e}")
 
-        if response.status_code == 204:
+        # If the response is empty, or the last available earthquake is newer than
+        # the end_timestamp, then we have no more earthquakes to fetch.
+        if response.status_code == 204 or self.start_timestamp > self.end_timestamp:
             logger.info("No more earthquakes to fetch.")
             exit(0)
 
@@ -76,12 +78,10 @@ class HistoricalEarthquakes:
             earthquakes = []
 
             for earthquake in response_dict["q:quakeml"]["eventParameters"]["event"]:
-                # if 'time' < self.end_timestamp, then replace self.end_timestamp with 'time'
                 time_str = earthquake["origin"]["time"]["value"]
                 ts = parser.isoparse(time_str).astimezone(timezone.utc)
 
-                if ts < self.end_timestamp:
-                    self.end_timestamp = ts
+                self.start_timestamp = ts
 
                 try:
                     earthquakes.append(
@@ -95,6 +95,8 @@ class HistoricalEarthquakes:
                             region=earthquake["description"]["text"],
                         )
                     )
+                    time.sleep(3)
+
                 except KeyError:
                     logger.warning(
                         f"Skipping earthquake with missing data: {earthquake}"
