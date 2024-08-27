@@ -14,7 +14,7 @@ class HistoricalEarthquakes:
     A class to query the Seismic Portal API for historical earthquakes.
     """
 
-    URL = "https://www.seismicportal.eu/fdsnws/event/1/query?limit={limit}&start={start_timestamp}&&end={end_timestamp}"
+    URL = "https://www.seismicportal.eu/fdsnws/event/1/query?limit={limit}&start={start_date}&end={end_date}"
 
     def __init__(
         self,
@@ -23,9 +23,7 @@ class HistoricalEarthquakes:
     ):
         self.last_n_days = last_n_days
         self.limit = limit
-        self.start_timestamp, self.end_timestamp = self._init_from_to_timestamps(
-            self.last_n_days
-        )
+        self.start_date, self.end_date = self._init_from_to_dates(self.last_n_days)
 
     def get_earthquakes(self) -> List[Earthquake]:
         """
@@ -46,42 +44,47 @@ class HistoricalEarthquakes:
                     "longitude": -116.1513
                 }
         """
-        # The query always pulls the latest data first. As we
-        # loop, we will replace the end_timestamp with the
-        # timestamp of the last earthquake we fetched.
-        logger.info(
-            f"Querying historical earthquakes from {self.start_timestamp} to {self.end_timestamp}."
-        )
+        # The query always pulls the latest data first. We need to query from the start so that
+        # we can get the oldest data first and process the data via Quixstreams. To do this, we
+        # need to query the data in chunks of 90 days. That will provide a safe buffer to ensure
+        # that we don't miss any data given the batch limit of 20,000.
+
+        start_of_batch = self.start_date
+        end_of_batch = min(start_of_batch + timedelta(days=90), self.end_date)
 
         try:
+            logger.info("Running query to Seismic Portal API.")
             response = requests.get(
                 self.URL.format(
                     limit=self.limit,
-                    start_timestamp=self.start_timestamp,
-                    end_timestamp=self.end_timestamp,
+                    start_date=start_of_batch,
+                    end_date=end_of_batch,
                 )
             )
             response.raise_for_status()
-        except Exception as e:
-            logger.info(f"Failed to query Seismic Portal API. Status code: {e}")
 
-        if response.status_code == 204:
+        except Exception as e:
+            logger.info(f"Failed to query Seismic Portal API. Status code: {e}.")
+            exit(1)
+
+        # We have no earthquakes to fetch if:
+        # 1. The response status code is 204, i.e. our query returned no results.
+        # 2. The start timestamp is greater than the end timestamp.
+        # 3. The batch size is less than the limit, meaning we have fetched all the earthquakes.
+
+        if response.status_code == 204 or start_of_batch > end_of_batch:
             logger.info("No more earthquakes to fetch.")
             exit(0)
 
         else:
+            logger.info(f"Downloading earthquakes from {start_of_batch} to {end_of_batch}.")
             response_dict = xmltodict.parse(response.text)
 
             # Extract the earthquakes from the response
             earthquakes = []
 
             for earthquake in response_dict["q:quakeml"]["eventParameters"]["event"]:
-                # if 'time' < self.end_timestamp, then replace self.end_timestamp with 'time'
                 time_str = earthquake["origin"]["time"]["value"]
-                ts = parser.isoparse(time_str).astimezone(timezone.utc)
-
-                if ts < self.end_timestamp:
-                    self.end_timestamp = ts
 
                 try:
                     earthquakes.append(
@@ -95,11 +98,16 @@ class HistoricalEarthquakes:
                             region=earthquake["description"]["text"],
                         )
                     )
+
                 except KeyError:
-                    logger.warning(
-                        f"Skipping earthquake with missing data: {earthquake}"
-                    )
+                    logger.warning(f"Skipping earthquake with missing data: {earthquake}")
                     continue
+
+            self.start_date = end_of_batch + timedelta(days=1)
+
+            # Sort the earthquakes by timestamp on the way out to ensure that
+            # the data is processed by kafka in the correct order.
+            earthquakes = sorted(earthquakes, key=lambda x: x.timestamp_sec)
 
             return earthquakes
 
@@ -120,10 +128,11 @@ class HistoricalEarthquakes:
         return int(timestamp.timestamp())
 
     @staticmethod
-    def _init_from_to_timestamps(last_n_days: int) -> Tuple[datetime, datetime]:
+    def _init_from_to_dates(last_n_days: int) -> Tuple[datetime, datetime]:
         """
-        Initializes the start and end timestamps for the query.
+        Initializes the start and end dates for the query.
         """
-        end_timestamp = datetime.now(timezone.utc)
-        start_timestamp = end_timestamp - timedelta(days=last_n_days)
-        return start_timestamp, end_timestamp
+        end_date = datetime.now(timezone.utc).date()
+        start_date = end_date - timedelta(days=last_n_days)
+
+        return start_date, end_date
