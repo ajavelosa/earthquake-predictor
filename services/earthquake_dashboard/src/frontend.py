@@ -44,7 +44,7 @@ else:
 
 
 data["datetime"] = data["timestamp"].apply(
-    lambda x: datetime.fromtimestamp(x, timezone.utc)
+    lambda x: datetime.fromtimestamp(x / 1000, timezone.utc)
 )
 
 data.set_index("datetime", inplace=True)
