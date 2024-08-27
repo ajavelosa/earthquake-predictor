@@ -1,7 +1,7 @@
 export KAFKA_TOPIC=earthquakes
 export KAFKA_CONSUMER_GROUP=earthquakes_consumer_group
 export FEATURE_GROUP_NAME=earthquakes
-export FEATURE_GROUP_VERSION=4
+export FEATURE_GROUP_VERSION=3
 
 # number of elements we save at once to the Hopsworks feature store
 # For live data we want to save it to the online store as soon as possible,
