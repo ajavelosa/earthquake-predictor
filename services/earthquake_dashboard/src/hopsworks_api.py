@@ -85,24 +85,13 @@ class HopsworksApi:
 
     def get_primary_keys(self, last_n_days: int) -> List[Dict]:
         """
-        Returns a list of dictionaries with the primary keys (timestamps)
-        of the rows we want to fetch
+        Returns a list of dictionaries with the primary keys (regions)
+        of the rows we want to fetch.
         """
-        # Generate all hours in int for the last 'last_n_days' days
-
-        import time
-
         assert last_n_days > 0, "last_n_days must be greater than 0"
 
-        # # get the current time in seconds and floor to the last hour
-        current_hr_utc = int(time.time()) // (60 * 60)
-
-        # # generate a list of hours in int for the last 'last_n_days' days
-        hrs = [current_hr_utc - i for i in range(last_n_days * 24)]
         regions = get_regions(last_n_days)
 
-        primary_keys = [
-            {"region": region} for region in regions
-        ]
+        primary_keys = [{"region": region} for region in regions]
 
         return primary_keys

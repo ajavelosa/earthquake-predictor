@@ -41,8 +41,6 @@ else:
     data = live_data
 
 # Convert timestamp in milliseconds to datetime
-
-
 data["datetime"] = data["timestamp"].apply(
     lambda x: datetime.fromtimestamp(x / 1000, timezone.utc)
 )
