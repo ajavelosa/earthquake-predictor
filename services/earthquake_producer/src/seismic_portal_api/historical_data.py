@@ -1,6 +1,5 @@
 import requests
 import xmltodict
-import time
 
 from loguru import logger
 
@@ -105,6 +104,10 @@ class HistoricalEarthquakes:
                     continue
 
             self.start_date = end_of_batch + timedelta(days=1)
+
+            # Sort the earthquakes by timestamp on the way out to ensure that
+            # the data is processed by kafka in the correct order.
+            earthquakes = sorted(earthquakes, key=lambda x: x.timestamp_sec)
 
             return earthquakes
 

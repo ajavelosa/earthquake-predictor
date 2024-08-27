@@ -33,7 +33,7 @@ def main(
     # and use earthquakes with lesser magnitudes as supporting
     # features to be used by our machine learning model.
 
-    sdf = sdf.tumbling_window(duration_ms=timedelta(seconds=window_duration_seconds), grace_ms=5000)
+    sdf = sdf.tumbling_window(duration_ms=timedelta(seconds=window_duration_seconds))
 
     sdf = sdf.reduce(initializer=init_earthquakes, reducer=reduce_earthquakes).final()
 

@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 class Config(BaseSettings):
 
     kafka_broker_address: str = "localhost:19092"
-    kafka_consumer_group: str = "earthquakes_by_day_consumer_group"
+    kafka_consumer_group: str = "earthquakes_aggregated_consumer_group"
 
     input_topic: str = "earthquakes_historical"
     output_topic: str = "earthquakes_aggregated"
