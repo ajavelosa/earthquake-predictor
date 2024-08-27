@@ -43,7 +43,7 @@ else:
 # Convert timestamp in milliseconds to datetime
 
 
-data["datetime"] = data["timestamp_sec"].apply(
+data["datetime"] = data["timestamp"].apply(
     lambda x: datetime.fromtimestamp(x, timezone.utc)
 )
 

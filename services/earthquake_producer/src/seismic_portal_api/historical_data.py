@@ -77,7 +77,9 @@ class HistoricalEarthquakes:
             exit(0)
 
         else:
-            logger.info(f"Downloading earthquakes from {start_of_batch} to {end_of_batch}.")
+            logger.info(
+                f"Downloading earthquakes from {start_of_batch} to {end_of_batch}."
+            )
             response_dict = xmltodict.parse(response.text)
 
             # Extract the earthquakes from the response
@@ -89,7 +91,7 @@ class HistoricalEarthquakes:
                 try:
                     earthquakes.append(
                         Earthquake(
-                            timestamp_sec=self.to_sec(time_str),
+                            timestamp=self.to_ms(time_str),
                             datestr=time_str[:10],
                             latitude=earthquake["origin"]["latitude"]["value"],
                             longitude=earthquake["origin"]["longitude"]["value"],
@@ -100,23 +102,25 @@ class HistoricalEarthquakes:
                     )
 
                 except KeyError:
-                    logger.warning(f"Skipping earthquake with missing data: {earthquake}")
+                    logger.warning(
+                        f"Skipping earthquake with missing data: {earthquake}"
+                    )
                     continue
 
             self.start_date = end_of_batch + timedelta(days=1)
 
             # Sort the earthquakes by timestamp on the way out to ensure that
             # the data is processed by kafka in the correct order.
-            earthquakes = sorted(earthquakes, key=lambda x: x.timestamp_sec)
+            earthquakes = sorted(earthquakes, key=lambda x: x.timestamp)
 
             return earthquakes
 
     @staticmethod
-    def to_sec(timestamp: str) -> int:
+    def to_ms(timestamp: str) -> int:
         """
-        A function that transforms a UTC timestamp expressed
-        as a string like this '2024-06-17T09:36:39.467866Z'
-        into a timestamp expressed in seconds like 1718616999.
+        A function that transforms a UTC timestamp expressed as a
+        string like this '2024-06-17T09:36:39.467866Z' into a
+        timestamp expressed in milliseconds like  171861699000.
 
         Args:
             timestamp (str): A timestamp expressed as a string.
@@ -125,7 +129,7 @@ class HistoricalEarthquakes:
             int: A timestamp expressed in milliseconds.
         """
         timestamp = parser.isoparse(timestamp).astimezone(timezone.utc)
-        return int(timestamp.timestamp())
+        return int(timestamp.timestamp()) * 1000
 
     @staticmethod
     def _init_from_to_dates(last_n_days: int) -> Tuple[datetime, datetime]:

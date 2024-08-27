@@ -84,13 +84,13 @@ def custom_ts_extractor(
     Specifying a custom timestamp extractor to use the timestamp from the message payload
     instead of Kafka timestamp.
 
-    We want to use the `timestamp_sec` field from the message value, and not the timestamp
-    of the message that Kafka generates when the message is saved into the Kafka topic.
+    We want to use the `timestamp` field from the message value, and not the timestamp of
+    the message that Kafka generates when the message is saved into the Kafka topic.
 
     See the Quix Streams documentation here
     https://quix.io/docs/quix-streams/windowing.html#extracting-timestamps-from-messages
     """
-    return value["timestamp_sec"] * 1000
+    return value["timestamp"]
 
 def init_earthquakes(value: dict) -> dict:
     """

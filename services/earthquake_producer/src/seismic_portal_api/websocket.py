@@ -27,7 +27,7 @@ class SeismicPortalAPI:
         Returns:
             Earthquake: An Earthquake model with the format:
                 {
-                    "timestamp_sec": 1721270674,
+                    "timestamp": 1721270674000,
                     "datestr": 2024-07-18,
                     "region": "NEAR THE COAST OF WESTERN TURKEY",
                     "magnitude": 2.4,
@@ -44,10 +44,10 @@ class SeismicPortalAPI:
 
         msg_contents = msg["data"]["properties"]
 
-        timestamp_sec = self.to_sec(msg_contents["time"])
+        timestamp = self.to_ms(msg_contents["time"])
 
         earthquake = Earthquake(
-            timestamp_sec=timestamp_sec,
+            timestamp=timestamp,
             datestr=msg_contents["time"][:10],
             latitude=msg_contents["lat"],
             longitude=msg_contents["lon"],
@@ -59,21 +59,21 @@ class SeismicPortalAPI:
         return [earthquake]
 
     @staticmethod
-    def to_sec(timestamp: str) -> int:
+    def to_ms(timestamp: str) -> int:
         """
         A function that transforms a UTC timestamp expressed
         as a string like this '2024-06-17T09:36:39.467866Z'
         into a timestamp expressed in milliseconds such as
-        1718616999.
+        1718616999000.
 
         Args:
             timestamp (str): A timestamp expressed as a string.
 
         Returns:
-            int: A timestamp expressed in seconds.
+            int: A timestamp expressed in milliseconds.
         """
         from dateutil import parser
         from datetime import timezone
 
         timestamp = parser.isoparse(timestamp).astimezone(timezone.utc)
-        return int(timestamp.timestamp())
+        return int(timestamp.timestamp()) * 1000
