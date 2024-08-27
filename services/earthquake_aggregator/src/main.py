@@ -40,23 +40,23 @@ def main(
     """
     We need to transform the current schema from this:
     {
-        "start": 1724281200000
-        "end": 1724284800000
+        "start": 1724709600000
+        "end": 1724713200000
         "value": {
-            "region": "EASTERN TURKEY"
-            "magnitude": 2.3
-            "depth": 6.9
-            "total_earthquakes": 2
+            "region": "GREECE"
+            "magnitude": 2.5
+            "depth": 5
+            "total_earthquakes": 3
         }
     }
 
     to this:
     {
-        "region": "EASTERN TURKEY"
-        "magnitude": 2.3
-        "depth": 6.9
-        "total_earthquakes": 2
-        "timestamp": 1724284800000
+        "region": "GREECE"
+        "magnitude": 2.5
+        "depth": 5
+        "total_earthquakes": 3
+        "timestamp": 1724713200000
     }
     """
 
