@@ -110,7 +110,7 @@ deployments:
         inputType: FreeText
         description: Version of the feature group containing the data
         required: true
-        value: 3
+        value: 1
       - name: FEATURE_VIEW_NAME
         inputType: FreeText
         description: Feature view that reads the data
@@ -120,7 +120,7 @@ deployments:
         inputType: FreeText
         description: Version of the feature view that reads the data
         required: true
-        value: 3
+        value: 1
 
 # This section describes the Topics of the data pipeline
 topics:
