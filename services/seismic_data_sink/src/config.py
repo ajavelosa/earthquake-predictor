@@ -20,6 +20,7 @@ class Config(BaseSettings):
     # buffer size to store messages in memory before writing
     # to the feature store
     buffer_size: int
+    partition_key: str = "datestr"
 
     # force save to feature store every n seconds
     save_every_n_sec: int = 1

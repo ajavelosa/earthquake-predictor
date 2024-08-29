@@ -47,6 +47,7 @@ def kafka_to_feature_store(
     live_or_historical: Optional[str] = "live",
     create_new_consumer_group: Optional[bool] = False,
     save_every_n_sec: Optional[int] = 60,
+    partition_key: Optional[str] = "datestr",
 ) -> None:
     """
     Writes data from the `earthquake` Kafka topic and saves the data to
@@ -133,6 +134,7 @@ def kafka_to_feature_store(
                                 online_or_offline="online"
                                 if live_or_historical == "live"
                                 else "offline",
+                                partition_key=partition_key,
                             )
                         except Exception as e:
                             logger.error(
@@ -163,6 +165,7 @@ if __name__ == "__main__":
             live_or_historical=config.live_or_historical,
             save_every_n_sec=config.save_every_n_sec,
             create_new_consumer_group=config.create_new_consumer_group,
+            partition_key=config.partition_key,
         )
     except KeyboardInterrupt:
         logger.info("Exiting neatly!")

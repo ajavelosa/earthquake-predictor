@@ -6,6 +6,14 @@ run-dev-historical:
 	KAFKA_BROKER_ADDRESS='localhost:19092' \
 	source ../../setup_credentials.sh && source setup_historical_config.sh && poetry run python src/main.py
 
+run-dev-aggregated:
+	KAFKA_BROKER_ADDRESS='localhost:19092' \
+	source ../../setup_credentials.sh && source setup_live_aggregated_config.sh && poetry run python src/main.py
+
+run-dev-aggregated-historical:
+	KAFKA_BROKER_ADDRESS='localhost:19092' \
+	source ../../setup_credentials.sh && source setup_historical_aggregated_config.sh && poetry run python src/main.py
+
 build:
 	@echo "Building the docker image for the seismic_data_sink microservice..."
 	docker build -t seismic_data_sink .

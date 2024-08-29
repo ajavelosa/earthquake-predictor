@@ -10,6 +10,7 @@ def push_data_to_feature_store(
     feature_group_version: int,
     data: List[dict],
     online_or_offline: str,
+    partition_key: str = "datestr",
 ) -> None:
     """
     Pushes the given `data` to the feature store, writing it to the feature group
@@ -41,7 +42,7 @@ def push_data_to_feature_store(
         version=feature_group_version,
         description="Earthquake data from Seismic Portal",
         primary_key=["region"],
-        partition_key=["datestr"],
+        partition_key=[partition_key],
         event_time="timestamp",
         online_enabled=True,
     )
