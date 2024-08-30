@@ -1,0 +1,6 @@
+name: earthquake_aggregator
+language: python
+variables: []
+dockerfile: Dockerfile
+runEntryPoint: src/main.py
+defaultFile: src/main.py
