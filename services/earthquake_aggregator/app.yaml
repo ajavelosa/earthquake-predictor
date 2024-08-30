@@ -6,7 +6,7 @@ variables:
     description: Topic containing raw earthquake data
     defaultValue: earthquake
     required: true
-  - name: KAFKA_OUTPUT_TOPIC
+  - name: OUTPUT_TOPIC
     inputType: OutputTopic
     description: Earthquakes aggregated by a specified tumbling window
     defaultValue: earthquake_aggregated
