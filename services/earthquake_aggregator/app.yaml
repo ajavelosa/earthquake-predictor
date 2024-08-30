@@ -1,7 +1,7 @@
 name: earthquake_aggregator
 language: python
 variables:
-  - name: KAFKA_INPUT_TOPIC
+  - name: INPUT_TOPIC
     inputType: InputTopic
     description: Topic containing raw earthquake data
     defaultValue: earthquake
