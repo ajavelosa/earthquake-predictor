@@ -11,6 +11,11 @@ variables:
     description: Earthquakes aggregated by a specified tumbling window
     defaultValue: earthquake_aggregated
     required: true
+  - name: WINDOW_DURATION_SECONDS
+    inputType: FreeText
+    description: Duration of the tumbling window
+    defaultValue: 3600
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/main.py
 defaultFile: src/main.py
