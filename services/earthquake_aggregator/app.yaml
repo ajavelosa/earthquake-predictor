@@ -16,7 +16,7 @@ variables:
     description: Duration of the tumbling window
     defaultValue: 3600
     required: true
-  - name: kafka_consumer_group
+  - name: KAFKA_CONSUMER_GROUP
     inputType: FreeText
     description: Consumer group to consume data from the input topic
     defaultValue: earthquake_aggregated_consumer_group
