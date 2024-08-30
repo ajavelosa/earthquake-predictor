@@ -204,6 +204,11 @@ deployments:
         description: Time before buffer is pushed to feature store
         required: true
         value: 600
+      - name: PARTITION_KEY
+        inputType: FreeText
+        description: Partition key for feature store
+        required: true
+        value: timestamp
 
 # This section describes the Topics of the data pipeline
 topics:
