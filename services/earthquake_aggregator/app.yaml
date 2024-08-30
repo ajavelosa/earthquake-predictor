@@ -1,4 +1,4 @@
-name: earthquake_aggregator
+name: Earthquake Aggregator
 language: python
 variables:
   - name: INPUT_TOPIC
