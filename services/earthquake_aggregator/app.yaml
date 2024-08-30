@@ -1,6 +1,11 @@
 name: earthquake_aggregator
 language: python
-variables: []
+variables:
+  - name: KAFKA_INPUT_TOPIC
+    inputType: InputTopic
+    description: Topic containing raw earthquake data
+    defaultValue: earthquake
+    required: true
 dockerfile: Dockerfile
 runEntryPoint: src/main.py
 defaultFile: src/main.py
