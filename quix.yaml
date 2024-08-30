@@ -145,6 +145,11 @@ deployments:
         description: Duration of the tumbling window
         required: true
         value: 3600
+      - name: KAFKA_CONSUMER_GROUP
+        inputType: FreeText
+        description: Consumer group to consume data from the input topic
+        required: true
+        value: earthquake_aggregated_consumer_group
 
 # This section describes the Topics of the data pipeline
 topics:
