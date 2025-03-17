@@ -1,4 +1,5 @@
 import json
+import ssl
 
 from loguru import logger
 from websocket import create_connection
@@ -14,7 +15,7 @@ class SeismicPortalAPI:
 
     def __init__(self):
         logger.info("Connecting to websocket.")
-        self._ws = create_connection(self.URL)
+        self._ws = create_connection(self.URL, sslopt={"cert_reqs": ssl.CERT_NONE})
         logger.info("Successfully connected to the websocket.")
 
     def get_earthquakes(self) -> Earthquake:
