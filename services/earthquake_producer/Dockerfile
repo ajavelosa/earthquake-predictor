@@ -33,7 +33,7 @@ ENV VIRTUAL_ENV=/app/.venv \
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 # add /app/src to PYTHONPATH
-ENV PYTHONPATH "${PYTHONPATH}:/app/src"
+ENV PYTHONPATH="${PYTHONPATH}:/app/src"
 
 # copy all the source code into the container
 COPY src ./src
