@@ -70,6 +70,7 @@ class HopsworksApi:
         except FeatureStoreException:
             # retry the call with the use_hive option. This is what Hopsworks recommends
             logger.info("Data not available.")
+            features = pd.DataFrame()
 
         return features
 
