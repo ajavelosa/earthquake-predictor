@@ -55,6 +55,8 @@ def push_data_to_feature_store(
 
     feature_group.insert(
         data,
+        overwrite=False,
+        operation="upsert",
         write_options={
             "start_offline_materialization": True
             if online_or_offline == "offline"
