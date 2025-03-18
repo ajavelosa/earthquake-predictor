@@ -45,6 +45,7 @@ def push_data_to_feature_store(
         partition_key=[partition_key],
         event_time="timestamp",
         online_enabled=True,
+        offline_backfill_every_hr=3,
     )
 
     # transform the data (dict) into a pandas dataframe
