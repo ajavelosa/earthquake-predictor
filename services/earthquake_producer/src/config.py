@@ -11,6 +11,7 @@ class Config(BaseSettings):
 
     last_n_days: int = 30
     limit: int = 20000
+    time_interval: int = 60 * 5
 
     @field_validator("live_or_historical")
     @classmethod

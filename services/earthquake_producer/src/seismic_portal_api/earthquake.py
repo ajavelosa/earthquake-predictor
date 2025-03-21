@@ -13,3 +13,4 @@ class Earthquake(BaseModel):
     depth: float
     latitude: float
     longitude: float
+    uuid: str
