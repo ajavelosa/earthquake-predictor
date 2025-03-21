@@ -79,6 +79,11 @@ deployments:
         description: Time before buffer is pushed to feature store
         required: true
         value: 600
+      - name: PARTITION_KEY
+        inputType: FreeText
+        description: Partition key for feature store
+        required: true
+        value: datestr
   - name: Earthquake dashboard
     application: services/earthquake_dashboard
     version: latest
