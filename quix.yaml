@@ -126,7 +126,6 @@ deployments:
         description: Version of the feature view that reads the data
         required: true
         value: 1
-    disabled: true
   - name: Earthquake aggregator
     application: services/earthquake_aggregator
     version: latest
