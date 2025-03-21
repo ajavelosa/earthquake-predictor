@@ -27,12 +27,12 @@ def get_offline_data():
     return hopsworks_api.extract_offline_features_from_feature_view()
 
 
-def get_online_data(last_n_days: int = 7):
-    return hopsworks_api.extract_online_features_from_feature_view(last_n_days)
+def get_online_data():
+    return hopsworks_api.extract_online_features_from_feature_group()
 
 
 historical_data = get_offline_data()
-live_data = get_online_data(config.last_n_days)
+live_data = get_online_data()
 
 if live_or_historical == "Historical":
     data = historical_data
@@ -44,6 +44,7 @@ else:
 data["datetime"] = data["timestamp"].apply(
     lambda x: datetime.fromtimestamp(x / 1000, timezone.utc)
 )
+data = data[["datetime", "region", "magnitude", "latitude", "longitude", "depth"]]
 
 data.set_index("datetime", inplace=True)
 

@@ -1,11 +1,9 @@
 import hopsworks
 import pandas as pd
+from hsfs.feature_group import FeatureGroup
 from hsfs.feature_view import FeatureView, FeatureStoreException
-from typing import List, Dict
 
 from loguru import logger
-
-from src.external_data.regions import get_regions
 
 
 class HopsworksApi:
@@ -29,6 +27,23 @@ class HopsworksApi:
         self.feature_view_name = feature_view_name
         self.feature_view_version = feature_view_version
         logger.info("Connected to Hopsworks")
+        self.feature_store = self.project.get_feature_store()
+        logger.info("Connected to Hopsworks Feature Store")
+
+    def get_feature_group(self) -> FeatureGroup:
+        """
+        Gets the feature group from the Hopsworks feature store. If it does
+        not exist, it creates it.
+        """
+
+        # Get the feature group to read the feature view from
+        feature_group = self.feature_store.get_feature_group(
+            name=self.feature_group_name,
+            version=self.feature_group_version,
+        )
+        logger.info(f"Connected to feature group: {self.feature_group_name}")
+
+        return feature_group
 
     def get_feature_view(self) -> FeatureView:
         """
@@ -36,18 +51,10 @@ class HopsworksApi:
         not exist, it creates it. We need the feature view in order to show
         data in the dashboard.
         """
-        feature_store = self.project.get_feature_store()
 
-        # Get the feature group to read the feature view from
-        feature_group = feature_store.get_feature_group(
-            name=self.feature_group_name,
-            version=self.feature_group_version,
-        )
-        logger.info(f"Connected to feature group: {self.feature_group_name}")
+        feature_group = self.get_feature_group()
 
-        # Get the feature view to read data from. If it does not
-        # exist, create it.
-        feature_view = feature_store.get_or_create_feature_view(
+        feature_view = self.feature_store.get_or_create_feature_view(
             name=self.feature_view_name,
             version=self.feature_view_version,
             query=feature_group.select_all(),
@@ -74,25 +81,11 @@ class HopsworksApi:
 
         return features
 
-    def extract_online_features_from_feature_view(self, last_n_days) -> pd.DataFrame:
-        feature_view = self.get_feature_view()
-
-        features = feature_view.get_feature_vectors(
-            entry=self.get_primary_keys(last_n_days),
-            return_type="pandas",
-        )
-
-        return features
-
-    def get_primary_keys(self, last_n_days: int) -> List[Dict]:
+    def extract_online_features_from_feature_group(self) -> pd.DataFrame:
         """
-        Returns a list of dictionaries with the primary keys (regions)
-        of the rows we want to fetch.
+        Extracts online features from the feature view.
         """
-        assert last_n_days > 0, "last_n_days must be greater than 0"
 
-        regions = get_regions(last_n_days)
+        feature_group = self.get_feature_group()
 
-        primary_keys = [{"region": region} for region in regions]
-
-        return primary_keys
+        return feature_group.read(online=True)

@@ -81,17 +81,17 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.37.13"
+version = "1.37.17"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.37.13-py3-none-any.whl", hash = "sha256:90fa5a91d7d7456219f0b7c4a93b38335dc5cf4613d885da4d4c1d099e04c6b7"},
-    {file = "boto3-1.37.13.tar.gz", hash = "sha256:295648f887464ab74c5c301a44982df76f9ba39ebfc16be5b8f071ad1a81fe95"},
+    {file = "boto3-1.37.17-py3-none-any.whl", hash = "sha256:3e7c2056b0e7950818c4b8695ac0da3a7933cf9f4f45d67f8804ce37fdef8a7b"},
+    {file = "boto3-1.37.17.tar.gz", hash = "sha256:f4ae383aca1799061d83c0097e9ccd7b494a71b36d72226628ad0fde1b95b7c9"},
 ]
 
 [package.dependencies]
-botocore = ">=1.37.13,<1.38.0"
+botocore = ">=1.37.17,<1.38.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.11.0,<0.12.0"
 
@@ -100,13 +100,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.37.13"
+version = "1.37.17"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.37.13-py3-none-any.whl", hash = "sha256:aa417bac0f4d79533080e6e17c0509e149353aec83cfe7879597a7942f7f08d0"},
-    {file = "botocore-1.37.13.tar.gz", hash = "sha256:60dfb831c54eb466db9b91891a6c8a0c223626caa049969d5d42858ad1e7f8c7"},
+    {file = "botocore-1.37.17-py3-none-any.whl", hash = "sha256:f8c93eec385a346c7a59efcb15d8cf3613cd9d6ab27f32492eed9549bd86d69e"},
+    {file = "botocore-1.37.17.tar.gz", hash = "sha256:c879c2a5dc6952b81591d0e765c7b93e90df7f6c50b3d9b68011ec7cfe7fe48d"},
 ]
 
 [package.dependencies]
@@ -889,20 +889,20 @@ test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "narwhals"
-version = "1.30.0"
+version = "1.31.0"
 description = "Extremely lightweight compatibility layer between dataframe libraries"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "narwhals-1.30.0-py3-none-any.whl", hash = "sha256:443aa0a1abfae89bc65a6b888a7e310a03d1818bfb2ccd61c150199a5f954c17"},
-    {file = "narwhals-1.30.0.tar.gz", hash = "sha256:0c50cc67a5404da501302882838ec17dce51703d22cd8ad89162d6f60ea0bb19"},
+    {file = "narwhals-1.31.0-py3-none-any.whl", hash = "sha256:2a7b79bb5f511055c4c0142121fc0d4171ea171458e12d44dbd9c8fc6488e997"},
+    {file = "narwhals-1.31.0.tar.gz", hash = "sha256:333472e2562343dfdd27407ec9b5114a07c81d0416794e4ac6b703dd925c6a1a"},
 ]
 
 [package.extras]
-core = ["duckdb", "pandas", "polars", "pyarrow", "pyarrow-stubs"]
+core = ["duckdb", "pandas", "polars", "pyarrow", "sqlframe"]
 cudf = ["cudf (>=24.10.0)"]
 dask = ["dask[dataframe] (>=2024.8)"]
-dev = ["covdefaults", "hypothesis", "mypy (>=1.15.0,<1.16.0)", "pandas-stubs", "pre-commit", "pyright", "pytest", "pytest-cov", "pytest-env", "pytest-randomly", "typing-extensions"]
+dev = ["covdefaults", "hypothesis", "mypy (>=1.15.0,<1.16.0)", "pandas-stubs (==2.2.3.250308)", "polars (==1.25.2)", "pre-commit", "pyarrow-stubs (==17.18)", "pyright", "pytest", "pytest-cov", "pytest-env", "pytest-randomly", "sqlframe (==3.24.1)", "typing-extensions", "uv"]
 docs = ["black", "duckdb", "jinja2", "markdown-exec[ansi]", "mkdocs", "mkdocs-autorefs", "mkdocs-material", "mkdocstrings-python (>=1.16)", "mkdocstrings[python]", "pandas", "polars (>=1.0.0)", "pyarrow"]
 duckdb = ["duckdb (>=1.0)"]
 extra = ["scikit-learn"]
@@ -913,8 +913,8 @@ polars = ["polars (>=0.20.3)"]
 pyarrow = ["pyarrow (>=11.0.0)"]
 pyspark = ["pyspark (>=3.5.0)"]
 sqlframe = ["sqlframe (>=3.22.0)"]
-tests = ["covdefaults", "hypothesis", "pytest", "pytest-cov", "pytest-env", "pytest-randomly", "typing-extensions"]
-typing = ["mypy (>=1.15.0,<1.16.0)", "pandas-stubs", "pyright", "typing-extensions"]
+tests = ["covdefaults", "hypothesis", "pytest", "pytest-cov", "pytest-env", "pytest-randomly"]
+typing = ["hypothesis", "mypy (>=1.15.0,<1.16.0)", "pandas-stubs (==2.2.3.250308)", "polars (==1.25.2)", "pyarrow-stubs (==17.18)", "pyright", "pytest", "sqlframe (==3.24.1)", "typing-extensions", "uv"]
 
 [[package]]
 name = "numpy"
