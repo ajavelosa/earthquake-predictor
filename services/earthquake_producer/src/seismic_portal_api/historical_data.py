@@ -5,8 +5,8 @@ from loguru import logger
 
 from typing import List, Tuple
 from datetime import datetime, timedelta, timezone
-from dateutil import parser
 from src.seismic_portal_api.earthquake import Earthquake
+from src.seismic_portal_api.utils import to_ms, generate_earthquake_uuid
 
 
 class HistoricalEarthquakes:
@@ -89,15 +89,25 @@ class HistoricalEarthquakes:
                 time_str = earthquake["origin"]["time"]["value"]
 
                 try:
+                    region = earthquake["description"]["text"]
+                    timestamp = to_ms(time_str)
+                    magnitude = earthquake["magnitude"]["mag"]["value"]
+
+                    uuid = generate_earthquake_uuid(
+                        region,
+                        timestamp,
+                        magnitude
+                    )
                     earthquakes.append(
                         Earthquake(
-                            timestamp=self.to_ms(time_str),
+                            timestamp=timestamp,
                             datestr=time_str[:10],
                             latitude=earthquake["origin"]["latitude"]["value"],
                             longitude=earthquake["origin"]["longitude"]["value"],
                             depth=float(earthquake["origin"]["depth"]["value"]) / 1000,
-                            magnitude=earthquake["magnitude"]["mag"]["value"],
-                            region=earthquake["description"]["text"],
+                            magnitude=magnitude,
+                            region=region,
+                            uuid=uuid
                         )
                     )
 
@@ -114,22 +124,6 @@ class HistoricalEarthquakes:
             earthquakes = sorted(earthquakes, key=lambda x: x.timestamp)
 
             return earthquakes
-
-    @staticmethod
-    def to_ms(timestamp: str) -> int:
-        """
-        A function that transforms a UTC timestamp expressed as a
-        string like this '2024-06-17T09:36:39.467866Z' into a
-        timestamp expressed in milliseconds like  171861699000.
-
-        Args:
-            timestamp (str): A timestamp expressed as a string.
-
-        Returns:
-            int: A timestamp expressed in milliseconds.
-        """
-        timestamp = parser.isoparse(timestamp).astimezone(timezone.utc)
-        return int(timestamp.timestamp()) * 1000
 
     @staticmethod
     def _init_from_to_dates(last_n_days: int) -> Tuple[datetime, datetime]:
