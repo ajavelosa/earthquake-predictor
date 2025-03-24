@@ -218,3 +218,4 @@ deployments:
 # This section describes the Topics of the data pipeline
 topics:
   - name: earthquake_aggregated
+  - name: earthquake
