@@ -155,6 +155,7 @@ deployments:
         description: Consumer group to consume data from the input topic
         required: true
         value: earthquake_aggregated_consumer_group
+    disabled: true
   - name: Aggregated seismic data sink
     application: services/seismic_data_sink
     version: latest
