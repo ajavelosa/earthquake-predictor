@@ -1,4 +1,0 @@
-export INPUT_TOPIC=earthquakes_historical
-export OUTPUT_TOPIC=earthquakes_historical_aggregated
-export KAFKA_CONSUMER_GROUP=earthquakes_historical_aggregated_consumer_group
-export WINDOW_DURATION_SECONDS=3600
