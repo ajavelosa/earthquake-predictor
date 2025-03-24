@@ -79,6 +79,11 @@ deployments:
         description: Time before buffer is pushed to feature store
         required: true
         value: 600
+      - name: PARTITION_KEY
+        inputType: FreeText
+        description: Partition key for feature store
+        required: true
+        value: datestr
   - name: Earthquake dashboard
     application: services/earthquake_dashboard
     version: latest
@@ -212,10 +217,7 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
+  - name: earthquake_aggregated
   - name: earthquake
     configuration:
-      partitions: 1
-      replicationFactor: 2
       retentionInMinutes: 1440
-      retentionInBytes: 52428800
-  - name: earthquake_aggregated

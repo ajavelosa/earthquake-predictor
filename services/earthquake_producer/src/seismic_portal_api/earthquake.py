@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from uuid import UUID
 
 
 class Earthquake(BaseModel):
@@ -13,3 +14,4 @@ class Earthquake(BaseModel):
     depth: float
     latitude: float
     longitude: float
+    uuid: UUID

@@ -1,8 +1,10 @@
 import json
+import ssl
 
 from loguru import logger
 from websocket import create_connection
 from src.seismic_portal_api.earthquake import Earthquake
+from src.seismic_portal_api.utils import to_ms, generate_earthquake_uuid
 
 
 class SeismicPortalAPI:
@@ -14,7 +16,7 @@ class SeismicPortalAPI:
 
     def __init__(self):
         logger.info("Connecting to websocket.")
-        self._ws = create_connection(self.URL)
+        self._ws = create_connection(self.URL, sslopt={"cert_reqs": ssl.CERT_NONE})
         logger.info("Successfully connected to the websocket.")
 
     def get_earthquakes(self) -> Earthquake:
@@ -44,36 +46,24 @@ class SeismicPortalAPI:
 
         msg_contents = msg["data"]["properties"]
 
-        timestamp = self.to_ms(msg_contents["time"])
+        region = msg_contents["flynn_region"]
+        timestamp = to_ms(msg_contents["time"])
+        magnitude = msg_contents["mag"]
 
+        uuid = generate_earthquake_uuid(
+            region,
+            timestamp,
+            magnitude,
+        )
         earthquake = Earthquake(
             timestamp=timestamp,
             datestr=msg_contents["time"][:10],
             latitude=msg_contents["lat"],
             longitude=msg_contents["lon"],
             depth=msg_contents["depth"],
-            magnitude=msg_contents["mag"],
-            region=msg_contents["flynn_region"],
+            magnitude=magnitude,
+            region=region,
+            uuid=uuid,
         )
 
         return [earthquake]
-
-    @staticmethod
-    def to_ms(timestamp: str) -> int:
-        """
-        A function that transforms a UTC timestamp expressed
-        as a string like this '2024-06-17T09:36:39.467866Z'
-        into a timestamp expressed in milliseconds such as
-        1718616999000.
-
-        Args:
-            timestamp (str): A timestamp expressed as a string.
-
-        Returns:
-            int: A timestamp expressed in milliseconds.
-        """
-        from dateutil import parser
-        from datetime import timezone
-
-        timestamp = parser.isoparse(timestamp).astimezone(timezone.utc)
-        return int(timestamp.timestamp()) * 1000

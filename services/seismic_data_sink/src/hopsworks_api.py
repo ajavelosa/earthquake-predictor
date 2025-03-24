@@ -41,10 +41,11 @@ def push_data_to_feature_store(
         name=feature_group_name,
         version=feature_group_version,
         description="Earthquake data from Seismic Portal",
-        primary_key=["region"],
+        primary_key=["uuid"],
         partition_key=[partition_key],
         event_time="timestamp",
         online_enabled=True,
+        offline_backfill_every_hr=3,
     )
 
     # transform the data (dict) into a pandas dataframe
@@ -54,6 +55,8 @@ def push_data_to_feature_store(
 
     feature_group.insert(
         data,
+        overwrite=False,
+        operation="upsert",
         write_options={
             "start_offline_materialization": True
             if online_or_offline == "offline"
