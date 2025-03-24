@@ -185,6 +185,7 @@ deployments:
         description: Partition key for feature store
         required: true
         value: timestamp
+    disabled: true
 
 # This section describes the Topics of the data pipeline
 topics:
