@@ -13,4 +13,25 @@ class Config(BaseSettings):
     training_feature_group_name: str
     training_feature_group_version: int
 
+    training_feature_view_name: str
+    training_feature_view_version: int
+
+    training_columns: list = [
+        "uuid",
+        "region",
+        "timestamp",
+
+        "year",
+        "month",
+        "day",
+
+        "magnitude",
+
+        "next_timestamp",
+        "next_magnitude",
+        "time_to_next_days",
+
+        "is_significant",
+    ]
+
 config = Config()

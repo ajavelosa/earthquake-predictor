@@ -33,7 +33,8 @@ def generate_training_data(
 
     data = data_reader.read_from_online_store()
 
-    # 2. Preprocess the data and 3. Create the target values
+    # 2. Preprocess the data and
+    # 3. Create the target values
     df = dp.add_features(data)
 
     df = df[config.training_columns]

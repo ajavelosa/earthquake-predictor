@@ -1,19 +1,22 @@
 import pandas as pd
 from typing import Tuple
 
-from src.data_preprocessing import train_test_split
-from src.data_reader import DataReader
+import src.feature_generation.data_preprocessing as dp
+from src.feature_generation.data_reader import DataReader
+from src.feature_generation.data_writer import DataWriter
+
+from src.config import config
+
 
 def train(
-    feature_group_name: str,
-    feature_group_version: int,
-    feature_view_name: str,
-    feature_view_version: int,
-    last_n_days_to_fetch_from_store: int,
-    last_n_days_to_test_model: int,
+    training_feature_group_name: str,
+    training_feature_group_version: int,
+    training_feature_view_name: str,
+    training_feature_view_version: int,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
-    This function trains the model using the following steps:
+    This function creates the training data and pushes it
+    to the feature store.
 
     1. Fetch `last_n_days_to_fetch_from_store` data from the feature store.
     2. Split the data into training and testing sets.
@@ -24,25 +27,20 @@ def train(
     """
 
     data_reader = DataReader(
-        feature_view_name=feature_view_name,
-        feature_view_version=feature_view_version,
-        feature_group_name=feature_group_name,
-        feature_group_version=feature_group_version,
+        feature_view_name=training_feature_view_name,
+        feature_view_version=training_feature_view_version,
+        feature_group_name=training_feature_group_name,
+        feature_group_version=training_feature_group_version,
     )
 
-    data = data_reader.read_from_offline_store(last_n_days=last_n_days_to_fetch_from_store)
+    data = data_reader.read_from_online_store()
 
-    train_data, test_data = train_test_split(data, last_n_days_to_test=last_n_days_to_test_model)
-
-
-    return train_data, test_data
+    breakpoint()
 
 if __name__ == '__main__':
-    train_data, test_data = train(
-        feature_group_name='earthquakes',
-        feature_group_version=4,
-        feature_view_name='earthquakes',
-        feature_view_version=4,
-        last_n_days_to_fetch_from_store=30,
-        last_n_days_to_test_model=7,
-    )
+    train(
+        training_feature_group_name=config.training_feature_group_name,
+        training_feature_group_version=config.training_feature_group_version,
+        training_feature_view_name=config.training_feature_view_name,
+        training_feature_view_version=config.training_feature_view_version,
+   )
