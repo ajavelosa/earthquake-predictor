@@ -1,0 +1,6 @@
+export FEATURE_GROUP_NAME=earthquakes
+export FEATURE_GROUP_VERSION=1
+export FEATURE_VIEW_NAME=earthquakes
+export FEATURE_VIEW_VERSION=1
+export TRAINING_FEATURE_GROUP_NAME=earthquakes_training_data
+export TRAINING_FEATURE_GROUP_VERSION=1
