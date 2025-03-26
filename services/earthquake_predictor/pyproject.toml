@@ -7,10 +7,11 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10, <3.13"
-hopsworks = "^3.7.0"
+hopsworks = "^4.1.1"
 pandas = "<2.2.0"
 loguru = "^0.7.2"
 xmltodict = "^0.13.0"
+great-expectations = "^0.18.21"
 
 
 [build-system]
