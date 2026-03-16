@@ -10,6 +10,7 @@ dependencies = [
     "hopsworks>=4.1.1",
     "pyarrow>=19.0.1",
     "urllib3>=2.6.3",
+    "pyasn1>=0.6.2",
 ]
 
 [project.optional-dependencies]
