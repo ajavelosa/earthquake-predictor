@@ -5,20 +5,20 @@ description = ""
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
 dependencies = [
-    "loguru>=0.7.2",
-    "websocket-client>=1.8.0",
-    "tornado>=6.4.1",
-    "quixstreams>=2.7.0",
-    "python-dateutil>=2.9.0.post0",
-    "pydantic-settings>=2.3.4",
-    "xmltodict>=0.13.0",
-    "pandas>=2.2.2",
+    "loguru>=0.7.2,<0.8.0",
+    "websocket-client>=1.8.0,<2.0.0",
+    "tornado>=6.4.1,<7.0.0",
+    "quixstreams>=2.7.0,<3.0.0",
+    "python-dateutil>=2.9.0.post0,<2.10.0",
+    "pydantic-settings>=2.3.4,<3.0.0",
+    "xmltodict>=0.13.0,<0.14.0",
+    "pandas>=2.2.2,<3.0.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "ipykernel>=6.29.5",
-    "ruff>=0.5.2",
+    "ipykernel>=6.29.5,<7.0.0",
+    "ruff>=0.5.2,<0.6.0",
 ]
 
 [tool.hatch.build.targets.wheel]
